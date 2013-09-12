@@ -9,4 +9,20 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-YeomanTest::Application.config.secret_key_base = 'f103281524d1230bb5f9ad8322be417a3079b0433fd9ec32bc351e1dac95c90af6c09a2b83727ebb8ac6efbd1a80d4820c1b7ce55eafd978d3ec156950eb3671'
+
+require 'securerandom'
+
+def secure_token
+	token_file = Rails.root.join('.secret')
+	if File.exist?(token_file)
+		# Use the existing token
+		File.read(token_file).chomp
+	else
+		# Generate new token and store it in token_file
+		token = SecureRandom.hex(64)
+		File.write(token_file, token)
+		token
+	end
+end
+
+YeomanTest::Application.config.secret_key_base = secure_token #'f103281524d1230bb5f9ad8322be417a3079b0433fd9ec32bc351e1dac95c90af6c09a2b83727ebb8ac6efbd1a80d4820c1b7ce55eafd978d3ec156950eb3671'
