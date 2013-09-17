@@ -15,8 +15,8 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		console.log('CSRF: '+Ember.$.cookie('csrftoken'));
 		//console.log(controllers.content);
 		EmberApp.Utils.getToken();
-		Ember.$.post('http://localhost:3000/signup', data).then(function(response) {
-			//alert("Got a response");
+		Ember.$.post('/signup', data).then(function(response) {
+			alert("Got a response: "+response);
 		});
 	}
 

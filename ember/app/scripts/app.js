@@ -1,13 +1,6 @@
 var EmberApp = window.EmberApp = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 
-	/*
-	init: function() {
-		console.log('CSRF APP: '+Ember.$.cookie('csrftoken'));
-	}
-	*/
-	
-		//
 
 	getToken: function() {
 		alert('get token');

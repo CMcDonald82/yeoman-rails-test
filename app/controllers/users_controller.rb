@@ -13,15 +13,22 @@ class UsersController < ApplicationController
   		logger.debug("REACHED SERVER")
   		params.each do |key,value|
   			Rails.logger.debug "Param #{key}: #{value}"
+      end
+      
+      respond_to do |format|
+          format.json  { render :json => { :usr => "created" } }
+      end
 		end
-		@uname = request
-			logger.debug("UNAME: #{@uname}")
-			
-		Rails.logger.debug "INSPECT"
-		Rails.logger.debug params.inspect
+		
 
-    tkn = form_authenticity_token
-    Rails.logger.debug("TOKEN #{tkn}")
+    #@uname = request
+		#	logger.debug("UNAME: #{@uname}")
+			
+		#Rails.logger.debug "INSPECT"
+		#Rails.logger.debug params.inspect
+
+    #tkn = form_authenticity_token
+    #Rails.logger.debug("TOKEN #{tkn}")
 		
   		 
   		#@user = User.new(params[:user])
@@ -29,6 +36,6 @@ class UsersController < ApplicationController
   			# Handle successful save
   		#else
   			# Handle unsuccessful save
-  	end
+  	#end
 
 end
