@@ -1,3 +1,3 @@
-Ember.Router.map(function () {
-  
+EmberApp.Router.map(function () {
+  	this.route("register", { path: "/register" });
 });

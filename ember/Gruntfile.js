@@ -2,10 +2,11 @@
 'use strict';
 var LIVERELOAD_PORT = 35729;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -18,14 +19,14 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
-
+    
     // configurable paths
     var yeomanConfig = {
         app: 'app',
         dist: '../public' //'dist'
     };
 
-    grunt.loadNpmTasks('grunt-connect-proxy');
+    
 
     grunt.initConfig({
         yeoman: yeomanConfig,
@@ -70,21 +71,23 @@ module.exports = function (grunt) {
             },
             proxies: [
                 {
-                    context: '/cortex',
-                    host: '10.10.2.202',
-                    port: 8080,
+                    context: '/api', //'/cortex'
+                    host: 'localhost', //'10.10.2.202',
+                    port: 3000, //8080,
                     https: false,
-                    changeOrigin: false
+                    changeOrigin: true
                 }
             ],
             livereload: {
                 options: {
                     middleware: function (connect) {
                         return [
+                            
                             lrSnippet,
-                            proxySnippet,
+                            
                             mountFolder(connect, '.tmp'),
-                            mountFolder(connect, yeomanConfig.app)
+                            mountFolder(connect, yeomanConfig.app),
+                            proxySnippet
                         ];
                     }
                 }
@@ -342,6 +345,9 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-connect-proxy');
+
+
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
@@ -349,9 +355,11 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+
             'concurrent:server',
-            'neuter:app',
             'configureProxies',
+            'neuter:app',
+            
             //'livereload-start',
             'connect:livereload',
             'open',
