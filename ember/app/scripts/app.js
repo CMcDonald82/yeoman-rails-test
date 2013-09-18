@@ -3,7 +3,7 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 
 	CROSS_DOMAIN: true,
 
-	URL_BASE: 'http://localhost:3000',
+	URL_BASE: '', //'http://localhost:3000',
 
 	CSRF_TOKEN: '',
 	REQ_FORGERY_TOKEN: '',
