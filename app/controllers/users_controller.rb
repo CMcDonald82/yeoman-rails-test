@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  before_filter :cors, :verify
+  #before_filter :cors#, :verify
 	#skip_before_filter :verify_authenticity_token, :except => [:create]
-	protect_from_forgery #:except => :create
+	#protect_from_forgery #:except => :create
 
   
 
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   		logger.debug("REACHED SERVER")
   		
       ses = session[:_csrf_token]
-      logger.debug("session: #{ses}")
+      puts "session: #{ses}"
 
       params.each do |key,value|
   			Rails.logger.debug "Param #{key}: #{value}"
@@ -36,10 +36,15 @@ class UsersController < ApplicationController
 
       #logger.debug(params[:session])
       verified = verified_request?
-      logger.debug("Verified? #{verified}")
+      puts "Verified? #{verified}"
 
 		end
 
+
+    #def cors
+    #  super
+    #end
+=begin
     def cors
       headers['Access-Control-Allow-Origin'] = '*'
       headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
@@ -47,10 +52,12 @@ class UsersController < ApplicationController
       headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token'
     end
 
+
+
     def verify
       logger.debug("Verified (before_filter)? #{verified_request?}")
     end
-
+=end
 
 		
 

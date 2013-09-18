@@ -42,8 +42,6 @@ EmberApp.Utils = Ember.Object.create({
 
 
 	setupAjax: function() {
-
-
 		$.ajaxSetup({
   			beforeSend: function(jqXHR) {
     			jqXHR.setRequestHeader('X-CSRF-Token', EmberApp.CSRF_TOKEN);

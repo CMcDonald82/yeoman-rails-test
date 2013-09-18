@@ -20,7 +20,11 @@ EmberApp.RegisterController = Ember.Controller.extend({
 			//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
 			//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
 
-			EmberApp.Utils.setupAjax();
+			//console.log("PRODUCTION_SETTINGS: "+EmberApp.PRODUCTION_SETTINGS);
+			if (EmberApp.PRODUCTION_SETTINGS === true) {
+				EmberApp.Utils.setupAjax();
+			}
+			console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
 			Ember.$.post(EmberApp.URL_BASE+'/signup', data).then(function(response) {
 				alert("Got a response: "+response);
 			});
