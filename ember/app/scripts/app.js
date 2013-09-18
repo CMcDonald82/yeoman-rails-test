@@ -1,6 +1,12 @@
 var EmberApp = window.EmberApp = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 
+	CROSS_DOMAIN: true,
+
+	URL_BASE: 'http://localhost:3000',
+
+	CSRF_TOKEN: '',
+	REQ_FORGERY_TOKEN: '',
 
 	getToken: function() {
 		alert('get token');
