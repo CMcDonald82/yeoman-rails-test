@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 	# Enable below for production. During development, can disable since if enabled, will cause errors on cross-domain
 	# 	requests when headers are modified (necessary for Rails to receive the csrf_token)
 	
-	protect_from_forgery with: :null_session #:exception
+	#protect_from_forgery with: :null_session #:exception
 
 	before_filter :cors
   

@@ -2,7 +2,7 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 
 
-	PRODUCTION_SETTINGS: true,
+	PRODUCTION_SETTINGS: false,
 
 	CROSS_DOMAIN: '',
 	URL_BASE: '',
@@ -41,6 +41,7 @@ if (EmberApp.PRODUCTION_SETTINGS === true) {
 
 
 /* Order and include as you please. */
+require('scripts/components/*');
 require('scripts/controllers/*');
 require('scripts/store');
 require('scripts/models/*');
@@ -48,3 +49,4 @@ require('scripts/routes/*');
 require('scripts/views/*');
 require('scripts/router');
 require('scripts/utils/*');
+

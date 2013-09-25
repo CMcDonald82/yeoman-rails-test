@@ -6,6 +6,8 @@ class CsrfController < ApplicationController
 
   	#protect_from_forgery
 
+  	include Hi
+
   	def create
   		
 		tkn = form_authenticity_token
@@ -19,6 +21,8 @@ class CsrfController < ApplicationController
 		
 		ses = session[:_csrf_token]
       	logger.debug("csrf session: #{ses}")
+
+      	say_hi
 		
 		#respond_with(msg)
 		respond_to do |format|

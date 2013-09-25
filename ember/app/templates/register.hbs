@@ -1,21 +1,29 @@
 <h1>Sign Up</h1>
 
-<form class="well" {{action 'register' on="submit"}}>
+<form class="well" {{action 'login' on="submit"}}>
 	<h2>Register</h2>
-	<div class="form-group">
-		{{input value=username type="text" placeholder="Username" }}
-	</div>
-	<div class="form-group">
-		{{input value=password type="password" placeholder="Password" }}
-	</div>
-	<div class="form-group">
-		{{input value=password_confirm type="password" placeholder="Confirm Password" }}
-	</div>
-	<div class="form-group">
-		{{input value=email type="text" placeholder="Email"}}
-	</div>
 
-		{{input value=csrf type="hidden" name="authenticity_token"}}
+	{{ register-fields pl="Username" pass=false }}
 
-	{{input class="btn" type="submit" value="Register"}}
+	{{ register-fields pl="Password" pass=true }}
+
+	{{#if isRegister}}
+		{{ register-fields pl="Confirm Password" pass=true }}
+		{{ register-fields pl="Email" pass=false }}
+	{{/if}}
+	
+
+
+	{{input value=csrf type="hidden" name="authenticity_token"}}
+
+	{{input class="btn" type="submit" value=submitButtonVal }}
 </form>
+
+<!--
+<button {{action 'hello' 'person'}}>
+  		Say Hello to person
+</button>
+-->
+
+
+

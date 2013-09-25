@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+
+
 module YeomanTest
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -19,5 +21,10 @@ module YeomanTest
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    # Needed in order to have access to files in 'app_modules' directory. This is where classes for the heavy app 
+    #   logic (such as ranking/sorting algorithms that operate on data from multiple models and create json 
+    #   output to be sent to client) will live (for now) 
+    config.autoload_paths += %W(#{config.root}/lib/app_modules)
   end
 end

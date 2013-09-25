@@ -4,6 +4,8 @@ EmberApp.RegisterController = Ember.Controller.extend({
 
 	//controllerBinding: 'controllers.application',
 
+	submitButtonVal: "Login",
+
 	register: function() {
 		var data = {
 			username: this.get('username'),
@@ -29,10 +31,6 @@ EmberApp.RegisterController = Ember.Controller.extend({
 				alert("Got a response: "+response);
 			});
 		});
-		
-		
-
-
 
 		/*
 		$.ajax({
@@ -43,12 +41,26 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		}).done(function(resp) {
 			alert('THE RESPONSE: '+resp);
 		});	
-		*/
+		*/	
+	},
 
-			
-		
-		
+	/*
+	hello: function(name) {
+		alert("Hello "+name);
+	},
+	*/
+
+	toggleReg: function() {
+		this.toggleProperty('isRegister');
+		this.set('submitButtonVal', 'Register');
+	},
+
+	login: function() {
+		// Make call to /login on server to perform validation & auth. If user is authenticated, redirect to appropriate
+		// section of app (patient or dr). If not authenticated & authorized, call toggleReg() to proceed to registration step
+		this.toggleReg();
 	}
+
 
 
 });
