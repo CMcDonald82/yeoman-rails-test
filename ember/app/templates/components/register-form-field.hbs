@@ -1,0 +1,13 @@
+<div class="form-group">
+	
+	{{#if pass}}
+		{{ input type="password" value=val placeholder=pl kind=kind }}
+	{{else}}
+		{{ input type="text" value=val placeholder=pl kind=kind }}
+	{{/if}}
+
+	{{#if errorMessage}}
+		<div class="alert alert-error">{{ errorMessage }}</div>
+	{{/if}}
+	
+</div>

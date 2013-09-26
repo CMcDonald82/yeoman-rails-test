@@ -1,15 +1,15 @@
 <h1>Sign Up</h1>
 
-<form class="well" {{action 'login' on="submit"}}>
+<form class="well" {{action auth on="submit"}}>
 	<h2>Register</h2>
 
-	{{ register-fields pl="Username" pass=false }}
+	{{ register-form-field val=username pl="Username" kind='uname' }}
 
-	{{ register-fields pl="Password" pass=true }}
+	{{ register-form-field val=password pl="Password" kind='pass' pass=true }}
 
 	{{#if isRegister}}
-		{{ register-fields pl="Confirm Password" pass=true }}
-		{{ register-fields pl="Email" pass=false }}
+		{{ register-form-field val=confirm_password pl="Confirm Password" kind='pass' pass=true }}
+		{{ register-form-field val=email pl="Email" kind='email' }}
 	{{/if}}
 	
 
@@ -18,6 +18,8 @@
 
 	{{input class="btn" type="submit" value=submitButtonVal }}
 </form>
+
+
 
 <!--
 <button {{action 'hello' 'person'}}>
