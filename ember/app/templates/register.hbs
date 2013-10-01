@@ -3,21 +3,32 @@
 <form class="well" {{action auth on="submit"}}>
 	<h2>Register</h2>
 
-	{{ register-form-field val=username pl="Username" kind='uname' }}
+	{{ register-form-field val=username pl="Username" kind='uname' outer=controller }}
 
-	{{ register-form-field val=password pl="Password" kind='pass' pass=true }}
+	{{ register-form-field val=password pl="Password" kind='pass' pass=true name="pass" outer=controller }}
 
 	{{#if isRegister}}
-		{{ register-form-field val=confirm_password pl="Confirm Password" kind='pass' pass=true }}
-		{{ register-form-field val=email pl="Email" kind='email' }}
+		{{ register-form-field val=password_confirm pl="Confirm Password" kind='pass' pass=true name="pass-confirm" outer=controller }}
+		{{ register-form-field val=email pl="Email" kind='email' outer=controller }}
 	{{/if}}
 	
-
 
 	{{input value=csrf type="hidden" name="authenticity_token"}}
 
 	{{input class="btn" type="submit" value=submitButtonVal }}
 </form>
+
+{{#if errorMessages}}
+	<ul class="alert alert-error">
+	{{#each errorMessages}}
+		<li>{{this}}</li>
+	{{/each}}
+	</ul>
+{{/if}}
+
+{{#if loginError}}
+	<div class="alert alert-error">{{ loginError }}</div>
+{{/if}}
 
 
 

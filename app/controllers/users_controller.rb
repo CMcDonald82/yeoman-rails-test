@@ -11,6 +11,22 @@ class UsersController < ApplicationController
   	end
 
   	def create
+
+
+      @user = User.new(user_params)
+      if @user.save
+        puts "USER SAVE SUCCESSFUL"
+        respond_to do |format|
+          format.json  { render :json => { :msg => "SUCCESS" } }
+      end
+      else
+        puts "user errors #{@user.errors.full_messages}"
+        # Return list (array) of error messages to be parsed and displayed by client
+        respond_to do |format|
+          format.json  { render :json => { :msg => @user.errors.full_messages } }
+        end
+      end
+
       #@current_user = current_user
   		#puts "PARAMS: "params
   		# If defined (if the text fields were not blank when submitted), the values will show up as key/value pairs in the params hash
@@ -23,9 +39,9 @@ class UsersController < ApplicationController
   			Rails.logger.debug "Param #{key}: #{value}"
       end
       
-      respond_to do |format|
-          format.json  { render :json => { :usr => "created" } }
-      end
+      #respond_to do |format|
+      #    format.json  { render :json => { :usr => "created" } }
+      #end
 
 
       
@@ -39,6 +55,13 @@ class UsersController < ApplicationController
       puts "Verified? #{verified}"
 
 		end
+
+
+    private
+
+      def user_params
+        params.permit(:name, :email, :password, :password_confirmation)
+      end
 
 
     #def cors

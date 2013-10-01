@@ -18,6 +18,9 @@ EmberApp.RegisterFormFieldComponent = Ember.Component.extend({
   		};
   		console.log('kind: '+this.get('kind'));
   		console.log('value: '+this.get('val')); //this.get('controller.uname'));
+		console.log('value: '+this.get('name'));
+
+		
 
 
   		/*
@@ -28,15 +31,29 @@ EmberApp.RegisterFormFieldComponent = Ember.Component.extend({
 				EmberApp.Utils.setupAjax();
 			}
 		*/
+
+
+		// Check to see if the form is in register mode (i.e. 'isRegister' is true), if so, make call to server for field validation.
+		// 	Otherwise, form is in login mode and no need to validate on keyup, just validate when username & pw are sent to server for auth check 
+		if (that.outer.isRegister) {
 			Ember.$.get(EmberApp.URL_BASE+'/validateRegField', data).then(function(resp) {
 				//alert("Got a response: "+response);
 				if (resp.msg) {
 					that.set('errorMessage', resp.msg);
 				} else {
-					that.set('errorMessage', '');
+					if (that.get('name') === "pass-confirm") {
+						console.log('SENDING PASS-CONFIRM ACTION');
+						that.outer.send('validatePassConfirm', that);
+					} else {
+					
+						that.set('errorMessage', '');
+					}
 				}
 			});
+		}
 		//});
+
+		
 
   		
   	}

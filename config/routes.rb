@@ -5,9 +5,13 @@ YeomanTest::Application.routes.draw do
   get "static_pages/home"
   get "reg_form_validators/create"
 
+  resources :sessions, only: [:create, :destroy]
+
   match '/signup', to: 'users#create', via: 'post'
   match '/csrf', to: 'csrf#create', via: 'get'
   match '/validateRegField', to: 'reg_form_validator#create', via: 'get'
+  match '/signin', to: 'sessions#create', via: 'post'
+  match '/signout', to: 'sessions#destroy', via: 'delete'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

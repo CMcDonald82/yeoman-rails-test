@@ -8,16 +8,32 @@ class RegFormValidatorController < ApplicationController
 	def create
 		@validator = RegFormValidator.new(type: params[:type], value: params[:value])
 
-		puts "CONTROLLER VALIDATION PARAMS: #{@validator.type}"
+		if params[:type] == "uname" && User.exists?(name: params[:value])		
+			msg = "Username already exists"
+		elsif !@validator.valid?
+			puts "ERRORS #{@validator.errors[:value]}"
+			msg = @validator.errors[:value]
+		end
 
 		
-		@validator.valid?
-		puts "VALID? #{@validator.valid?}"
 
+=begin
 		if !@validator.valid?
 			puts "ERRORS #{@validator.errors[:value]}"
 			msg = @validator.errors[:value]
 		end
+
+		puts "CONTROLLER VALIDATION PARAMS: #{@validator.type}"
+		@validator.valid?
+		puts "VALID? #{@validator.valid?}"
+
+
+
+
+
+
+
+
 
 =begin
 		if @validator.type == "email"
