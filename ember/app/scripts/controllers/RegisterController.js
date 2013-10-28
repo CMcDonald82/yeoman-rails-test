@@ -6,10 +6,23 @@ EmberApp.RegisterController = Ember.Controller.extend({
 
 	isRegister: false,
 	submitButtonVal: "Login",
+	isSelected: "type1",
 
 	init: function() {
 		console.log("init");
 		// Try putting CSRF token logic here
+		
+		
+		EmberApp.Utils.getToken(function() {
+			//data['authenticity_token'] = EmberApp.CSRF_TOKEN;
+			
+			if (EmberApp.PRODUCTION_SETTINGS === true) {
+				EmberApp.Utils.setupAjax();
+			}
+			console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
+			
+		});
+		
 	},
 
 
@@ -21,7 +34,7 @@ EmberApp.RegisterController = Ember.Controller.extend({
 			password: this.get('password'),
 			password_confirmation: this.get('password_confirm'),
 			email: this.get('email'),
-
+			role: this.isSelected
 		};
 		var that = this;
 		//this.uname = this.get('username');
@@ -29,17 +42,9 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		console.log(data);
 		console.log('CSRF: '+Ember.$.cookie('csrftoken'));
 		//console.log(controllers.content);
-		EmberApp.Utils.getToken(function() {
-			data['authenticity_token'] = EmberApp.CSRF_TOKEN;
-			//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
-			//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
-
-			//console.log("PRODUCTION_SETTINGS: "+EmberApp.PRODUCTION_SETTINGS);
-			if (EmberApp.PRODUCTION_SETTINGS === true) {
-				EmberApp.Utils.setupAjax();
-			}
-			console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
-			Ember.$.post(EmberApp.URL_BASE+'/signup', data).then(function(response) {
+		
+		
+		Ember.$.post(EmberApp.URL_BASE+'/signup', data).then(function(response) {
 				//alert("Got a response: "+response);
 				if (response['msg'] === "SUCCESS") {
 					alert('User saved to db');
@@ -47,29 +52,37 @@ EmberApp.RegisterController = Ember.Controller.extend({
 					alert('ERRORS: '+response['msg']);
 					// TODO: put similar logic here as in the RegisterFormField component to handle dispaying error msgs if any
 					that.set('errorMessages', response['msg']);
-					/*
-					for (var i=0; i < response['msg'].length; i++) {
-						that.set('errorMessages', response['msg'][i]);
-					}
-					*/
+				}
+				
+			});
+		
+		
+		/*
+		EmberApp.Utils.getToken(function() {
+			data['authenticity_token'] = EmberApp.CSRF_TOKEN;
+			
+			if (EmberApp.PRODUCTION_SETTINGS === true) {
+				EmberApp.Utils.setupAjax();
+			}
+			console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
+			Ember.$.post(EmberApp.URL_BASE+'/signup', data).then(function(response) {
+				alert("Got a response: "+response);
+				if (response['msg'] === "SUCCESS") {
+					alert('User saved to db');
+				} else {
+					alert('ERRORS: '+response['msg']);
+					// TODO: put similar logic here as in the RegisterFormField component to handle dispaying error msgs if any
+					that.set('errorMessages', response['msg']);
 				}
 				
 			});
 		});
+		*/
 
-		/*
-		$.ajax({
-			type: 'POST',
-			url: EmberApp.URL_BASE+'/signup',	
-			crossDomain: EmberApp.CROSS_DOMAIN,
-			headers: {'X-CSRF-TOKEN': EmberApp.CSRF_TOKEN}
-		}).done(function(resp) {
-			alert('THE RESPONSE: '+resp);
-		});	
-		*/	
+		
 	},
 
-	//actions: {
+	
 	validatePassConfirm: function(doof) {
 		console.log('got password_confirm action from component');
 		if (this.get('password_confirm') !== this.get('password')) {
@@ -80,11 +93,6 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		}
 	},
 
-	/*
-	hello: function(name) {
-		alert("Hello "+name);
-	},
-	*/
 
 	toggleReg: function() {
 		this.toggleProperty('isRegister');	
@@ -98,23 +106,44 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		console.log('LOGGING IN...');
 		console.log('isRegister: '+this.get('isRegister'));
 		var data = {
-			username: this.get('username'),
+			name: this.get('username'),
 			password: this.get('password')
 		};
 		var that = this;
+		//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
+		//data['authenticity_token'] = EmberApp.CSRF_TOKEN;
+
+		
+		//EmberApp.Utils.setupAjax();
 		Ember.$.post(EmberApp.URL_BASE+'/signin', data).then(function(resp) {
 
 			if (resp['msg'] === "REGISTER") {
 				alert('Transfer to register');
 				that.toggleReg();
 			} else if (resp['msg'] === "SUCCESS") {
-				alert("SUCCESS");
+				// Set EmberApp.API_TOKEN and a cookie equal to the value of the returned API token.
+				// With each request, the function making the request will get the token from the cookie and set EmberApp.API_TOKEN
+				//	equal to that value. EmberApp.API_TOKEN will then be passed to server in params
+				EmberApp.API_TOKEN = resp['token'];
+				$.cookie("apitoken", resp['token']);
+				alert("SUCCESS - SET API TOKEN TO: "+EmberApp.API_TOKEN);
+				//that.toggleReg();
+				//that.transitionToRoute('patient');
 			} else {
 				alert("ERROR");
 				that.set('loginError', resp['msg']);
 			}
 		});
 		
+		
+	},
+
+	logout: function() {
+		var data = {};
+		data['access_token'] = $.cookie("apitoken");
+		Ember.$.post(EmberApp.URL_BASE+'/signout', data).then(function(resp) {
+			alert('logged out');
+		});
 	},
 
 	// Temp method placeholder for the above 'register' method until the ember app flow is worked out and server-side
@@ -133,6 +162,7 @@ EmberApp.RegisterController = Ember.Controller.extend({
 			console.log('calling login');
 			
 			this.login();
+
 		}
 		
 	}

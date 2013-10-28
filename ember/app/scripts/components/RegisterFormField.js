@@ -36,6 +36,9 @@ EmberApp.RegisterFormFieldComponent = Ember.Component.extend({
 		// Check to see if the form is in register mode (i.e. 'isRegister' is true), if so, make call to server for field validation.
 		// 	Otherwise, form is in login mode and no need to validate on keyup, just validate when username & pw are sent to server for auth check 
 		if (that.outer.isRegister) {
+			//EmberApp.Utils.setupAjaxForApiToken(); // When using headers to send token to server
+			//alert("EmberApp.API_TOKEN IS: "+EmberApp.API_TOKEN);
+			data['access_token'] = EmberApp.API_TOKEN;
 			Ember.$.get(EmberApp.URL_BASE+'/validateRegField', data).then(function(resp) {
 				//alert("Got a response: "+response);
 				if (resp.msg) {

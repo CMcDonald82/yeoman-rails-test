@@ -12,13 +12,17 @@ class UsersController < ApplicationController
 
   	def create
 
+      params.each do |key,value|
+        Rails.logger.debug "Param #{key}: #{value}"
+      end
 
       @user = User.new(user_params)
       if @user.save
         puts "USER SAVE SUCCESSFUL"
+        # Put code here to 'login' user (try to do this by calling the 'create' method of sessions controller. If that doesn't work, just manually create an API token here)
         respond_to do |format|
           format.json  { render :json => { :msg => "SUCCESS" } }
-      end
+        end
       else
         puts "user errors #{@user.errors.full_messages}"
         # Return list (array) of error messages to be parsed and displayed by client
@@ -35,9 +39,7 @@ class UsersController < ApplicationController
       ses = session[:_csrf_token]
       puts "session: #{ses}"
 
-      params.each do |key,value|
-  			Rails.logger.debug "Param #{key}: #{value}"
-      end
+      
       
       #respond_to do |format|
       #    format.json  { render :json => { :usr => "created" } }
@@ -60,7 +62,7 @@ class UsersController < ApplicationController
     private
 
       def user_params
-        params.permit(:name, :email, :password, :password_confirmation)
+        params.permit(:name, :email, :password, :password_confirmation, :role)
       end
 
 

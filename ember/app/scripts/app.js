@@ -23,11 +23,14 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 
 
 	CSRF_TOKEN: '',
-	REQ_FORGERY_TOKEN: '',
+	REQ_FORGERY_TOKEN: '', //Can probably remove this
+	API_TOKEN: '',
 
+	/*
 	getToken: function() {
 		alert('get token');
 	}
+	*/
 });
 
 console.log('this.PRODUCTION_SETTINGS: '+EmberApp.PRODUCTION_SETTINGS);

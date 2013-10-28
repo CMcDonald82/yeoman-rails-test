@@ -1,9 +1,20 @@
 class RegFormValidatorController < ApplicationController
 
-	
+	#before_action :signed_in?, only: [:create,  :logged_in]
 	#def new
 	#	@validator = RegFormValidator.new
 	#end
+
+	#include Hi
+	
+	#before_filter :restrict_access
+
+
+
+	def logged_in
+		puts "AM I SIGNED IN? #{signed_in?}"
+	end
+
 
 	def create
 		@validator = RegFormValidator.new(type: params[:type], value: params[:value])
@@ -16,7 +27,7 @@ class RegFormValidatorController < ApplicationController
 		end
 
 		
-
+		logged_in
 =begin
 		if !@validator.valid?
 			puts "ERRORS #{@validator.errors[:value]}"

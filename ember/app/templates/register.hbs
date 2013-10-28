@@ -10,8 +10,17 @@
 	{{#if isRegister}}
 		{{ register-form-field val=password_confirm pl="Confirm Password" kind='pass' pass=true name="pass-confirm" outer=controller }}
 		{{ register-form-field val=email pl="Email" kind='email' outer=controller }}
+		
+		<label>
+		{{ view EmberApp.RadioButton name="selectionTest" selectionBinding="isSelected" value="type1" }} Patient
+		</label>
+		<label>
+		{{ view EmberApp.RadioButton name="selectionTest" selectionBinding="isSelected" value="type2" }} Doctor
+		</label>
 	{{/if}}
 	
+
+
 
 	{{input value=csrf type="hidden" name="authenticity_token"}}
 
@@ -32,11 +41,11 @@
 
 
 
-<!--
-<button {{action 'hello' 'person'}}>
-  		Say Hello to person
+
+<button {{action 'logout' }}>
+  	Logout
 </button>
--->
+
 
 
 

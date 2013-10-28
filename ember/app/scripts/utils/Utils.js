@@ -28,8 +28,15 @@ EmberApp.Utils = Ember.Object.create({
 			EmberApp.CSRF_TOKEN = resp['csrf_token'];
 			//$('meta[name="csrf-token"]').attr('content', resp['csrf_token']);
 			//$('meta[name="csrf-param"]').attr('content', resp['req_forgery_token']);
-			$('[name="authenticity_token"]').val(EmberApp.CSRF_TOKEN);
-			$.cookie("csrftoken", resp['csrf_token']);
+			
+			// Doesn't look like this line is needed, try on Heroku, see if it works without it
+			// This line will insert the CSRF_TOKEN in the hidden form field that has name="authenticity_token"
+			//$('[name="authenticity_token"]').val(EmberApp.CSRF_TOKEN);
+			
+			// Doesn't look like this line is needed, try on Heroku, see if it works without it
+			//$.cookie("csrftoken", resp['csrf_token']);
+			
+
 			callback();
 			/*
 			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
@@ -44,6 +51,7 @@ EmberApp.Utils = Ember.Object.create({
 	setupAjax: function() {
 		$.ajaxSetup({
   			beforeSend: function(jqXHR) {
+  				// If using headers for sending CSRF token to server
     			jqXHR.setRequestHeader('X-CSRF-Token', EmberApp.CSRF_TOKEN);
   			}
 		});
@@ -54,5 +62,14 @@ EmberApp.Utils = Ember.Object.create({
   			jqXHR.setRequestHeader('X-CSRF-Token', EmberApp.CSRF_TOKEN);
 		});
 		*/
+	},
+
+	// Refactor along with above setupAjax method into single method for setting up AJAX requests for CSRF & API token
+	setupAjaxForApiToken: function() {
+		$.ajaxSetup({
+  			beforeSend: function(jqXHR) {
+    			jqXHR.setRequestHeader('Authorization', "Token token="+EmberApp.API_TOKEN);
+  			}
+		});
 	}
 });

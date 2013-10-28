@@ -1,7 +1,7 @@
 YeomanTest::Application.routes.draw do
 
   get "csrf/create"
-  #get "users/new"
+  get "users/create"
   get "static_pages/home"
   get "reg_form_validators/create"
 
@@ -11,7 +11,9 @@ YeomanTest::Application.routes.draw do
   match '/csrf', to: 'csrf#create', via: 'get'
   match '/validateRegField', to: 'reg_form_validator#create', via: 'get'
   match '/signin', to: 'sessions#create', via: 'post'
-  match '/signout', to: 'sessions#destroy', via: 'delete'
+  match '/signout', to: 'sessions#destroy', via: 'post' #'delete'
+  match '/check_auth', to: 'sessions#check_auth', via: 'get'
+  match '/protect_auth', to: 'sessions#protect_auth', via: 'get'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
