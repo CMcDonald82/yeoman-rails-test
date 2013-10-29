@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 	# Try enabling and disabling this (along with the 'PRODUCTION' variable below) on Heroku version
 	#     See if the message 'Can't verify CSRF token authentication' appears in heroku logs as it does in development server
 	
-	protect_from_forgery with: :null_session #:null_session #:exception
+	#protect_from_forgery with: :null_session #:null_session #:exception
 
 
 	include SessionsHelper

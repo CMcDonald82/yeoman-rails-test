@@ -7,6 +7,8 @@ EmberApp.RegisterController = Ember.Controller.extend({
 	isRegister: false,
 	submitButtonVal: "Login",
 	isSelected: "type1",
+	lastFilter: '',
+	previousTransition: null,
 
 	init: function() {
 		console.log("init");
@@ -128,7 +130,13 @@ EmberApp.RegisterController = Ember.Controller.extend({
 				$.cookie("apitoken", resp['token']);
 				alert("SUCCESS - SET API TOKEN TO: "+EmberApp.API_TOKEN);
 				//that.toggleReg();
-				//that.transitionToRoute('patient');
+				
+				if (resp['role'] === "type1") {
+					that.set('lastFilter', 'patient');
+				} else {
+					that.set('lastFilter', 'typetwo');
+				}
+				that.transitionToRoute('index');
 			} else {
 				alert("ERROR");
 				that.set('loginError', resp['msg']);
@@ -139,10 +147,12 @@ EmberApp.RegisterController = Ember.Controller.extend({
 	},
 
 	logout: function() {
+		var that = this;
 		var data = {};
 		data['access_token'] = $.cookie("apitoken");
 		Ember.$.post(EmberApp.URL_BASE+'/signout', data).then(function(resp) {
 			alert('logged out');
+			that.set('lastFilter', '');
 		});
 	},
 

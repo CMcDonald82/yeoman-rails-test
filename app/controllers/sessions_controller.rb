@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
 		puts "PARAMS: #{params}"
 		
 		msg = ''
+		role = ''
 
 		puts "verified_request? #{verified_request?}"
 		puts "form_authenticity_token: #{form_authenticity_token}"
@@ -35,6 +36,7 @@ class SessionsController < ApplicationController
 			)
 			msg = "SUCCESS"
 			token = api_token.access_token
+			role = user.role
 			puts "API TOKEN CREATED FOR USER: #{api_token.user_id}"
 			puts "SENDING ACCESS TOKEN: #{token}"
 		elsif user
@@ -48,7 +50,7 @@ class SessionsController < ApplicationController
 		end
 
 		respond_to do |format|
-    		format.json  { render :json => { :msg => msg, :token => token } }   		
+    		format.json  { render :json => { :msg => msg, :token => token, :role => role } }   		
   		end
 	end
 
@@ -98,6 +100,16 @@ class SessionsController < ApplicationController
 		usr = User.find(api_key.user_id)
 		puts "IS ROLE AUTHORIZED? #{params[:role] == usr.role}"
 		head :unauthorized unless params[:role] == usr.role
+
+
+		msg = ''
+		if params[:role] == usr.role
+			msg = "AUTHORIZED"
+		end
+		respond_to do |format|
+    		format.json  { render :json => { :msg => msg } }   		
+  		end
 	end
+
 
 end
