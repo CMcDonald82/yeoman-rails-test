@@ -113,11 +113,11 @@ EmberApp.RegisterController = Ember.Controller.extend({
 			xsrf: EmberApp.CSRF_TOKEN
 		};
 		var that = this;
-		//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
-		//data['authenticity_token'] = EmberApp.CSRF_TOKEN;
-
 		
-		//EmberApp.Utils.setupAjax();
+
+		EmberApp.Utils.setupRefactored('POST', '/signin');
+		
+		/*
 		Ember.$.post(EmberApp.URL_BASE+'/signin', data).then(function(resp) {
 
 			if (resp['msg'] === "REGISTER") {
@@ -154,7 +154,7 @@ EmberApp.RegisterController = Ember.Controller.extend({
 				that.set('loginError', resp['msg']);
 			}
 		});
-		
+		*/
 		
 	},
 
