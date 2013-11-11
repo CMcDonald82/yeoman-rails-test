@@ -9,15 +9,15 @@ class ApplicationController < ActionController::Base
 	# Try enabling and disabling this (along with the 'PRODUCTION' variable below) on Heroku version
 	#     See if the message 'Can't verify CSRF token authentication' appears in heroku logs as it does in development server
 	
-	#protect_from_forgery with: :null_session #:null_session #:exception
+	protect_from_forgery with: :exception #:null_session #:exception
 
 
 	include SessionsHelper
 	include Hi
 
+	
 
-
-	PRODUCTION = false
+	PRODUCTION = true
 
 	if PRODUCTION
 		puts "PRODUCTION MODE"
@@ -26,8 +26,14 @@ class ApplicationController < ActionController::Base
 		puts "PHALSE"
 		before_filter :cors
 	end
-
   
+
+	#protected
+
+	#	def verified_request?
+	#		puts "VERIFYING REQUEST... #{ form_authenticity_token }"
+	#		super || form_authenticity_token == request.headers['X-XSRF-TOKEN']
+	#	end
 
   	def cors
   		headers['Access-Control-Allow-Origin'] = '*'
@@ -44,7 +50,7 @@ class ApplicationController < ActionController::Base
   		def restrict_access
   			# Use when passing token in via params
   			api_key = ApiKey.find_by_access_token(params[:access_token])
-  			head :unauthorized unless api_key
+  			head :unauthorized unless api_key and api_key.expires_at > Time.current()
 
   			# Use when passing token in via header
   			#authenticate_or_request_with_http_token do |token, options|

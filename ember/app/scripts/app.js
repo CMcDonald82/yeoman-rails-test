@@ -2,7 +2,7 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 
 
-	PRODUCTION_SETTINGS: false,
+	PRODUCTION_SETTINGS: true,
 
 	CROSS_DOMAIN: '',
 	URL_BASE: '',
@@ -25,6 +25,8 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 	CSRF_TOKEN: '',
 	REQ_FORGERY_TOKEN: '', //Can probably remove this
 	API_TOKEN: '',
+
+	currentPath: '',
 	
 
 	/*

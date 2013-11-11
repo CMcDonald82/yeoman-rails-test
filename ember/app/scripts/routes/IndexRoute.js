@@ -1,6 +1,11 @@
 
-//EmberApp.IndexRoute = EmberApp.CheckAuthRoute.extend();
+EmberApp.IndexRoute = EmberApp.AuthenticatedRoute.extend({
+	role: null,
+	authorize: false,
+	isIndex: true
+});
 
+/*
 EmberApp.IndexRoute = Ember.Route.extend({
 
 	beforeModel: function() {
@@ -33,3 +38,5 @@ EmberApp.IndexRoute = Ember.Route.extend({
 	}
 
 });
+
+*/

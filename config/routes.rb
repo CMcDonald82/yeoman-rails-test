@@ -14,6 +14,7 @@ YeomanTest::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: 'post' #'delete'
   match '/check_auth', to: 'sessions#check_auth', via: 'get'
   match '/protect_auth', to: 'sessions#protect_auth', via: 'get'
+  match '/client_redirect_auth', to: 'sessions#client_redirect_auth', via: 'get'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

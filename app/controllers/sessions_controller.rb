@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
 
-	before_action :restrict_access, only: [:check_auth, :destroy, :protect_auth]
+	before_action :restrict_access, only: [:check_auth, :destroy, :protect_auth, :client_redirect_auth]
 
 
 	# This is for signing in using traditional session-based approach. Does not seem to fit as 
@@ -32,7 +32,8 @@ class SessionsController < ApplicationController
 			#sign_in user 
 
 			api_token = ApiKey.create(
-				user_id: user.id
+				user_id: user.id,
+				expires_at: 5.minutes.from_now
 			)
 			msg = "SUCCESS"
 			token = api_token.access_token
@@ -99,17 +100,42 @@ class SessionsController < ApplicationController
 		api_key = ApiKey.find_by_access_token(params[:access_token])
 		usr = User.find(api_key.user_id)
 		puts "IS ROLE AUTHORIZED? #{params[:role] == usr.role}"
-		head :unauthorized unless params[:role] == usr.role
+		#head :unauthorized unless params[:role] == usr.role
 
 
 		msg = ''
 		if params[:role] == usr.role
 			msg = "AUTHORIZED"
+		else
+			msg = "UNAUTHORIZED"
 		end
 		respond_to do |format|
     		format.json  { render :json => { :msg => msg } }   		
   		end
 	end
+
+
+	# Rewritten version of protect_auth above. This will be used to determine authentication & authorization for client-side redirects
+	def client_redirect_auth
+		# Since the :restrict_access method is called whenever this method is called, that will take care of unauthenticated users (will return a 404 before this method is even run)
+		api_key = ApiKey.find_by_access_token(params[:access_token])
+		usr = User.find(api_key.user_id)
+		role = usr.role
+
+		msg = "UNAUTHORIZED"
+		if params[:authorize]
+			if params[:role] == usr.role
+				# Roles match and user is authorized
+				msg = "AUTHORIZED"
+			end
+		else
+			# User is authenticated (logged in) but is not authorized
+			msg = "AUTHENTICATED"
+		end
+		respond_to do |format|
+    		format.json  { render :json => { :msg => msg, :role => role } }   		
+  		end
+	end 
 
 
 end

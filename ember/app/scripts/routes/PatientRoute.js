@@ -1,5 +1,7 @@
 EmberApp.PatientRoute = EmberApp.AuthenticatedRoute.extend({
-	role: "type1"
+	role: "type1",
+	authorize: true,
+	isIndex: false
 });
 
 

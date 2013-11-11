@@ -8,7 +8,7 @@ EmberApp.RegisterController = Ember.Controller.extend({
 	submitButtonVal: "Login",
 	isSelected: "type1",
 	lastFilter: '',
-	previousTransition: null,
+	//previousTransition: null,
 
 	init: function() {
 		console.log("init");
@@ -18,10 +18,10 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		EmberApp.Utils.getToken(function() {
 			//data['authenticity_token'] = EmberApp.CSRF_TOKEN;
 			
-			if (EmberApp.PRODUCTION_SETTINGS === true) {
-				EmberApp.Utils.setupAjax();
-			}
-			console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
+			//if (EmberApp.PRODUCTION_SETTINGS === true) {
+			//	EmberApp.Utils.setupAjax();
+			//}
+			//console.log('EmberApp.URL_BASE: '+EmberApp.URL_BASE);
 			
 		});
 		
@@ -109,7 +109,8 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		console.log('isRegister: '+this.get('isRegister'));
 		var data = {
 			name: this.get('username'),
-			password: this.get('password')
+			password: this.get('password'),
+			xsrf: EmberApp.CSRF_TOKEN
 		};
 		var that = this;
 		//data['request_forgery_protection_token'] = EmberApp.CSRF_TOKEN;
@@ -131,12 +132,23 @@ EmberApp.RegisterController = Ember.Controller.extend({
 				alert("SUCCESS - SET API TOKEN TO: "+EmberApp.API_TOKEN);
 				//that.toggleReg();
 				
+				// Might no longer be needed, see if the 'lastFilter' stuff is still used anywhere
 				if (resp['role'] === "type1") {
 					that.set('lastFilter', 'patient');
 				} else {
 					that.set('lastFilter', 'typetwo');
 				}
-				that.transitionToRoute('index');
+
+				// See if there was a previousTransition (protected url that user tried to access but couldn't since they were not logged in)
+				//	If so, redirect to that, if not, user needs to be redirected according to the rules in the IndexRoute
+				var previousTransition = that.get('previousTransition');
+				if (previousTransition) {
+					that.set('previousTransition', null);
+					previousTransition.retry();
+				} else {
+					alert("TRANSITIONIN");
+					that.transitionToRoute('index');
+				}
 			} else {
 				alert("ERROR");
 				that.set('loginError', resp['msg']);
@@ -150,10 +162,14 @@ EmberApp.RegisterController = Ember.Controller.extend({
 		var that = this;
 		var data = {};
 		data['access_token'] = $.cookie("apitoken");
+		//data['xsrf'] = EmberApp.CSRF_TOKEN;
+		EmberApp.Utils.setupRefactored('POST', '/signout');
+		/*
 		Ember.$.post(EmberApp.URL_BASE+'/signout', data).then(function(resp) {
 			alert('logged out');
 			that.set('lastFilter', '');
 		});
+		*/
 	},
 
 	// Temp method placeholder for the above 'register' method until the ember app flow is worked out and server-side

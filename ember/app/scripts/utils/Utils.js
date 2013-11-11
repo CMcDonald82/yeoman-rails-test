@@ -26,8 +26,7 @@ EmberApp.Utils = Ember.Object.create({
 		}).done(function(resp) {
 			alert(resp['csrf_token']);
 			EmberApp.CSRF_TOKEN = resp['csrf_token'];
-			//$('meta[name="csrf-token"]').attr('content', resp['csrf_token']);
-			//$('meta[name="csrf-param"]').attr('content', resp['req_forgery_token']);
+			
 			
 			// Doesn't look like this line is needed, try on Heroku, see if it works without it
 			// This line will insert the CSRF_TOKEN in the hidden form field that has name="authenticity_token"
@@ -37,13 +36,9 @@ EmberApp.Utils = Ember.Object.create({
 			//$.cookie("csrftoken", resp['csrf_token']);
 			
 
-			callback();
-			/*
-			$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
-  				// Modify options, control originalOptions, store jqXHR, etc
-  				jqXHR.setRequestHeader('X-CSRF-Token', resp);
-			});
-*/
+			//callback();
+			
+			
 		});
 	},
 
@@ -52,7 +47,7 @@ EmberApp.Utils = Ember.Object.create({
 		$.ajaxSetup({
   			beforeSend: function(jqXHR) {
   				// If using headers for sending CSRF token to server
-    			jqXHR.setRequestHeader('X-CSRF-Token', EmberApp.CSRF_TOKEN);
+    			jqXHR.setRequestHeader('X-CSRF-TOKEN', EmberApp.CSRF_TOKEN);
   			}
 		});
 
@@ -71,5 +66,22 @@ EmberApp.Utils = Ember.Object.create({
     			jqXHR.setRequestHeader('Authorization', "Token token="+EmberApp.API_TOKEN);
   			}
 		});
+	},
+
+
+	setupRefactored: function(type, url) {
+		$.ajax({
+			type: type,
+			crossDomain: EmberApp.CROSS_DOMAIN,
+			url: EmberApp.URL_BASE+url,
+			beforeSend: function(xhr) { xhr.setRequestHeader('X-CSRF-TOKEN', EmberApp.CSRF_TOKEN) },
+			success: function(responseData, textStatus, jqXHR) {
+				alert("in");
+			},
+			error: function(responseData, textStatus, errorThrown) {
+				alert("POST failed");
+			}
+		});
 	}
+
 });

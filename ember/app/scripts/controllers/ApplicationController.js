@@ -6,6 +6,10 @@ EmberApp.ApplicationController = Ember.ArrayController.extend({
 		console.log('CSRF APP: '+Ember.$.cookie('csrftoken'));
 	},
 
+	updateCurrentPath: function() {
+        EmberApp.set('currentPath', this.get('currentPath'));
+    }.observes('currentPath'),
+
 	checkAuth: function(urlNext, role, authorize) {
 		alert('calling checkAuth');
 		var that = this;
