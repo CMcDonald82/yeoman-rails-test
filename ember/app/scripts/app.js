@@ -2,7 +2,7 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 	LOG_TRANSITIONS: true,
 
 
-	PRODUCTION_SETTINGS: true,
+	PRODUCTION_SETTINGS: false,
 
 	CROSS_DOMAIN: '',
 	URL_BASE: '',
@@ -27,6 +27,13 @@ var EmberApp = window.EmberApp = Ember.Application.create({
 	API_TOKEN: '',
 
 	currentPath: '',
+
+	// Set the initial time until session expiration to 5 mins (300s)
+	TIME_UNTIL_EXPIRATION: 0,
+
+	USER_ROLE: '',
+
+	//AUTH_POLL_INTERVAL: null,
 	
 
 	/*

@@ -1,9 +1,15 @@
 class SessionsController < ApplicationController
 
-	before_action :restrict_access, only: [:check_auth, :destroy, :protect_auth, :client_redirect_auth]
+	include ActionView::Helpers::DateHelper
 
+	before_action :restrict_access, only: [:check_auth, :protect_auth, :client_redirect_auth]
 
-	# This is for signing in using traditional session-based approach. Does not seem to fit as 
+	before_filter :reset_api_token_expiration, only: [:client_redirect_auth]
+
+	#before_action(:only => [:destroy]) { |c| c.authorize "type1" } #:authorize, only: [:destroy]
+	#before_filter :only => [:destroy] do authorize("type1") end
+
+	# This is for signing in using traditional session-based approach. Session approach does not seem to fit as 
 	# 	well with cient-side SPA accessing Rails app as an API
 	def create
 		puts "PARAMS: #{params}"
@@ -121,6 +127,7 @@ class SessionsController < ApplicationController
 		api_key = ApiKey.find_by_access_token(params[:access_token])
 		usr = User.find(api_key.user_id)
 		role = usr.role
+		timeUntilExp = ''
 
 		msg = "UNAUTHORIZED"
 		if params[:authorize]
@@ -132,8 +139,14 @@ class SessionsController < ApplicationController
 			# User is authenticated (logged in) but is not authorized
 			msg = "AUTHENTICATED"
 		end
+
+		if api_key
+			puts "WHY DOESNT THIS WORK? #{distance_of_time_in_words(Time.now, api_key.expires_at)}"
+			puts "SECONDS #{((api_key.expires_at - Time.now).seconds).round}"
+			timeUntilExp = ((api_key.expires_at - Time.now).seconds).round
+		end
 		respond_to do |format|
-    		format.json  { render :json => { :msg => msg, :role => role } }   		
+    		format.json  { render :json => { :msg => msg, :role => role, :timeUntilExp => timeUntilExp } }   		
   		end
 	end 
 

@@ -1,0 +1,11 @@
+<h5>User Type</h5>
+
+	{{#if isType1}}
+  		<h1>I'm a "Type 1" user!</h1>
+  	{{else}}
+	  	{{#if isType2}}
+	  		<h1>I'm a "Type 2" user!</h1>
+	  	{{else}}
+	  		<h1>I need to log in, I don't know what kind of user I am!</h1>
+	  	{{/if}}
+	{{/if}}

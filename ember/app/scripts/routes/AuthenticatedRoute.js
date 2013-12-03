@@ -33,6 +33,40 @@ EmberApp.AuthenticatedRoute = Ember.Route.extend({
 			data['authorize'] = true;
 		}
 		data['access_token'] = $.cookie('apitoken');
+
+
+		EmberApp.Utils.setupRefactored('GET', '/client_redirect_auth', data, function(resp) {
+			var loginController = that.controllerFor('register');	
+			var appController = that.controllerFor('application');		
+			appController.authPoller();
+			if (resp['msg'] === "UNAUTHORIZED") {
+				alert("NOT AUTH: "+trans);
+				var next = loginController.get('previousTransition');
+				console.log(next);
+				if (next) {
+					next.retry();
+				} else {
+					that.transitionTo('index');
+				}
+			} else {
+				loginController.set('previousTransition', trans);
+			}
+
+			if (isIndex) {
+				if (resp['role'] === "type1") {
+					//alert('transitioning to PATIENT');
+					that.transitionTo('patient');
+				} else if (resp['role'] === "type2") {
+					that.transitionTo('typetwo');
+				} 
+			}
+		}, function(err) {
+			// User is not logged in (not authenticated)
+			alert("STOP");
+			that.transitionTo('register');
+		});
+
+		/*
 		Ember.$.get(EmberApp.URL_BASE+'/client_redirect_auth', data).then(function(resp) {
 			
 			var loginController = that.controllerFor('register');			
@@ -63,6 +97,8 @@ EmberApp.AuthenticatedRoute = Ember.Route.extend({
 			alert("STOP");
 			that.transitionTo('register');
 		});	
+		*/
+
 	},
 
 

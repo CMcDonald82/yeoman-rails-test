@@ -1,11 +1,13 @@
 YeomanTest::Application.routes.draw do
 
+  get "questions/show"
   get "csrf/create"
   get "users/create"
   get "static_pages/home"
   get "reg_form_validators/create"
 
   resources :sessions, only: [:create, :destroy]
+  resources :questions, only: [:show, :index]
 
   match '/signup', to: 'users#create', via: 'post'
   match '/csrf', to: 'csrf#create', via: 'get'
@@ -15,6 +17,7 @@ YeomanTest::Application.routes.draw do
   match '/check_auth', to: 'sessions#check_auth', via: 'get'
   match '/protect_auth', to: 'sessions#protect_auth', via: 'get'
   match '/client_redirect_auth', to: 'sessions#client_redirect_auth', via: 'get'
+
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,7 +1,20 @@
 EmberApp.PatientRoute = EmberApp.AuthenticatedRoute.extend({
 	role: "type1",
 	authorize: true,
-	isIndex: false
+	isIndex: false,
+
+	/* Not needed, we set the model on the controllers in setupController below
+	model: function() {
+		return EmberApp.Question.find({'access_token': $.cookie('apitoken')});
+	},
+	*/
+
+
+	// Gets user's questions from server
+	setupController: function() {
+		this.controllerFor('questions').set('model', EmberApp.Question.find({'access_token': $.cookie('apitoken')}));	
+	}
+
 });
 
 

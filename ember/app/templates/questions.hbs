@@ -1,0 +1,17 @@
+<h5>Questions</h5>
+	{{#each item in controller}}
+		{{#linkTo 'question' item}}
+			{{item.name}}
+		{{/linkTo}}
+		{{item.answers}}
+
+		{{item.answers.length}}
+		{{#each a in item.answers}}
+			<h6>found</h6>
+			{{a.value}}
+		{{/each}}
+		
+	{{else}}
+		<p>Sorry, no questions are available. Please log in if you are the right type of user and your questions will display</p>
+	{{/each}}
+	{{ outlet }}

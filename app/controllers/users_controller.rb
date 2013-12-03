@@ -20,8 +20,17 @@ class UsersController < ApplicationController
       if @user.save
         puts "USER SAVE SUCCESSFUL"
         # Put code here to 'login' user (try to do this by calling the 'create' method of sessions controller. If that doesn't work, just manually create an API token here)
+        
+        api_token = ApiKey.create(
+          user_id: @user.id,
+          expires_at: 5.minutes.from_now
+        )
+        msg = "SUCCESS"
+        token = api_token.access_token
+        role = @user.role
+
         respond_to do |format|
-          format.json  { render :json => { :msg => "SUCCESS" } }
+          format.json  { render :json => { :msg => "SUCCESS", :token => token, :role => role } }
         end
       else
         puts "user errors #{@user.errors.full_messages}"

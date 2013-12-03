@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131008193014) do
+ActiveRecord::Schema.define(version: 20131113215603) do
+
+  create_table "answers", force: true do |t|
+    t.integer  "value"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
 
   create_table "api_keys", force: true do |t|
     t.string   "access_token"
@@ -21,6 +30,15 @@ ActiveRecord::Schema.define(version: 20131008193014) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "questions", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "questions", ["user_id"], name: "index_questions_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "name"

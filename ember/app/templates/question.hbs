@@ -1,0 +1,7 @@
+<h3>Question: {{ name }}</h2>
+<h5>Answers: </h5>
+	{{answers}}
+	{{#each ans in answers}}
+		{{ans.value}}
+		{{!value}}
+	{{/each}}

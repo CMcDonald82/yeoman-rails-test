@@ -34,6 +34,8 @@ gem 'rubyzip', '~> 0.9.9'
 
 gem 'bcrypt-ruby', '3.0.1'
 
+gem 'active_model_serializers'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -46,11 +48,15 @@ group :development do
 	gem 'spork-rails', github: 'sporkrb/spork-rails'
 	gem 'guard-spork', '1.5.0'
 	gem 'childprocess', '0.3.9'
+	gem 'konacha'
+	gem 'sinon-rails'
 end
 
 group :test do
 	gem 'selenium-webdriver', '2.0.0'
 	gem 'capybara', '2.1.0'
+	gem 'konacha'
+	gem 'sinon-rails'
 end
 
 group :production do
