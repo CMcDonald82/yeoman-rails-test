@@ -1,5 +1,6 @@
 YeomanTest::Application.routes.draw do
 
+  get "answers/show"
   get "questions/show"
   get "csrf/create"
   get "users/create"
@@ -8,6 +9,7 @@ YeomanTest::Application.routes.draw do
 
   resources :sessions, only: [:create, :destroy]
   resources :questions, only: [:show, :index]
+  resources :answers, only: [:create]
 
   match '/signup', to: 'users#create', via: 'post'
   match '/csrf', to: 'csrf#create', via: 'get'

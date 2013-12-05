@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   	
+    # Uncomment the below line once code is a bit more stable
   	#before_filter :only => [:index] do authorize("type1") end
 
     # Get all questions for specific user - TODO: restrict access here to only questions associated with current user

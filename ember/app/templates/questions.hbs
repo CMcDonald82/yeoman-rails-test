@@ -1,15 +1,19 @@
 <h5>Questions</h5>
-	{{#each item in controller}}
-		{{#linkTo 'question' item}}
-			{{item.name}}
+	{{!#each item in controller}}
+	{{#each model itemController="questionItem"}}
+		{{#linkTo 'question' model}}
+			{{model.name}}
 		{{/linkTo}}
-		{{item.answers}}
+		{{model.answers}}
 
-		{{item.answers.length}}
-		{{#each a in item.answers}}
+		{{model.answers.length}}
+		{{#each a in model.answers}}
 			<h6>found</h6>
 			{{a.value}}
 		{{/each}}
+		<h6>HA</h6>
+		{{input action="addAnswer" value=newAnswer}} 
+		
 		
 	{{else}}
 		<p>Sorry, no questions are available. Please log in if you are the right type of user and your questions will display</p>
